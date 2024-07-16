@@ -11,11 +11,11 @@ task_id_control = 1
 def create_task():
     global task_id_control
     data = request.get_json()
-    new_task = Task(title=data.get("title"),id = task_id_control, desc=data.get("description", ""))
+    new_task = Task(title=data.get("title"),id = task_id_control, desc=data.get("desc", ""))
     task_id_control += 1
     tasks.append(new_task)
     print(tasks)
-    return jsonify({"message":"New task was added successfully"})
+    return jsonify({"message":"New task was added successfully", "ID": new_task.id})
 
 @app.route('/tasks', methods=['GET'])
 def see_tasks():
@@ -23,6 +23,8 @@ def see_tasks():
     task_list = []
     for task in tasks:
         task_list.append(task.todict())
+
+
 
 #task_list = [task.todict for task in tasks]
 
@@ -42,20 +44,20 @@ def get_task(id):
     return jsonify({"message":"ID not found"}), 404
 
 @app.route("/tasks/<int:id>", methods=['PUT'])
+@app.route("/tasks/<int:id>", methods=['PUT'])
 def complete_task(id):
-    task = None
-    for i in tasks:
-        if i.id == id:
-            task = i
-    if task == None:
-        return jsonify({"message":"ID not found"}), 404
+    task = next((t for t in tasks if t.id == id), None)
+    
+    if task is None:
+        return jsonify({"message": "ID not found"}), 404
     
     data = request.get_json()
     task.title = data['title']
-    task.desc = data['description']
+    task.desc = data['desc']
     task.status = data['status']
     
-    return jsonify({"message":"Task updated successfully"})
+    return jsonify({"message": "Task updated successfully"}), 200
+
 
 @app.route('/tasks/<int:id>', methods=['DELETE'])
 def del_task(id):

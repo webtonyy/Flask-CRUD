@@ -7,8 +7,8 @@ class Task:
     
     def todict(self):
         return{
-            "Description":self.desc,
+            "desc":self.desc,
             "ID":self.id,
-            "Title":self.title,
-            "Status":self.status,
+            "title":self.title,
+            "status":self.status,
         }
