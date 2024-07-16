@@ -1,2 +1,2 @@
-# Flask-CRUD
-basic todo-list
+# Flask-Crud
+A simple crud with flask
